@@ -3,6 +3,10 @@ package com.nish.android.playground.dagger.module;
 import android.app.Application;
 import android.content.Context;
 
+import com.nish.android.playground.common.UseCaseDataProvider;
+
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -24,5 +28,4 @@ public class ApplicationModule {
     Application provideApplication() {
         return application;
     }
-
 }
