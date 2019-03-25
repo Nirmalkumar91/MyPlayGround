@@ -1,4 +1,4 @@
-package com.nish.android.playground.dagger.module;
+package com.nish.android.playground.di.module;
 
 import com.nish.android.playground.activity.LandingActivity;
 import com.nish.android.playground.activity.SplashActivity;

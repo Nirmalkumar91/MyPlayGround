@@ -1,9 +1,9 @@
-package com.nish.android.playground.dagger.component;
+package com.nish.android.playground.di.component;
 
 import com.nish.android.playground.PlayGroundApplication;
 import com.nish.android.playground.common.UseCaseDataProvider;
-import com.nish.android.playground.dagger.module.ActivityModule;
-import com.nish.android.playground.dagger.module.ApplicationModule;
+import com.nish.android.playground.di.module.ActivityModule;
+import com.nish.android.playground.di.module.ApplicationModule;
 
 import javax.inject.Singleton;
 

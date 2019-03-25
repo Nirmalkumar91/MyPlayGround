@@ -5,7 +5,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-public class BaseViewModel implements LCCallbackObserver {
+public abstract class BaseViewModel implements LCCallbackObserver {
 
     private LCCallbackEmitter callbackEmitter;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();

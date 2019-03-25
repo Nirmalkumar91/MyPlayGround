@@ -1,11 +1,7 @@
-package com.nish.android.playground.dagger.module;
+package com.nish.android.playground.di.module;
 
 import android.app.Application;
 import android.content.Context;
-
-import com.nish.android.playground.common.UseCaseDataProvider;
-
-import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;

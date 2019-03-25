@@ -3,9 +3,9 @@ package com.nish.android.playground;
 import android.app.Activity;
 import android.app.Application;
 
-import com.nish.android.playground.dagger.component.ApplicationComponent;
-import com.nish.android.playground.dagger.component.DaggerApplicationComponent;
-import com.nish.android.playground.dagger.module.ApplicationModule;
+import com.nish.android.playground.di.component.ApplicationComponent;
+import com.nish.android.playground.di.component.DaggerApplicationComponent;
+import com.nish.android.playground.di.module.ApplicationModule;
 
 import javax.inject.Inject;
 
