@@ -36,7 +36,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void startActivity(StartActivityEvent event) {
-        Intent startIntent = new Intent(this, event.getActivityClass());
-        startActivity(startIntent);
+        if(event.isExternalApp() && event.getIntent() != null) {
+            startActivity(event.getIntent());
+            finish();
+        } else {
+            Intent startIntent = new Intent(this, event.getActivityClass());
+            startActivity(startIntent);
+            if (event.finishActivity()) {
+                finish();
+            }
+        }
     }
 }

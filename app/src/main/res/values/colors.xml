@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--<color name="colorPrimary">@color/nish_green</color>
+    <color name="colorPrimaryDark">@color/nish_green_dark</color>
+    <color name="colorAccent">@color/nish_maroon</color>
+    <color name="colorBackground">@color/nish_white_background</color>
+    <color name="colorError">@color/nish_red</color>-->
+
+    <color name="primaryColor">#6200EE</color>
+    <color name="primaryVariantColor">#3700B3</color>
+    <color name="secondaryColor">#03DAC6</color>
+    <color name="secondaryVariantColor">#018786</color>
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="surfaceColor">#FFFFFF</color>
+    <color name="errorColor">#B00020</color>
+    <color name="onPrimaryColor">#FFFFFF</color>
+    <color name="onSecondaryColor">#000000</color>
+    <color name="onBackgroundColor">#000000</color>
+    <color name="onSurfaceColor">#000000</color>
+    <color name="onErrorColor">#FFFFFF</color>
+
+    <!--<color name="nish_green_dark">#007252</color>
+    <color name="nish_green">#009972</color>
+    <color name="nish_maroon">#502525</color>
+    <color name="nish_white_background">#DBEEE0</color>
+    <color name="nish_black">#202020</color>
+    <color name="nish_red">#961515</color>-->
+
 </resources>

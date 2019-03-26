@@ -1,53 +1,54 @@
 package com.nish.android.playground.viewmodel;
 
+import android.text.TextUtils;
+
 import com.nish.android.playground.activity.LandingActivity;
+import com.nish.android.playground.activity.LoginActivity;
 import com.nish.android.playground.common.BaseViewModel;
+import com.nish.android.playground.common.SharedPrefUtil;
 import com.nish.android.playground.common.events.StartActivityEvent;
-import com.nish.android.playground.common.UseCaseDataProvider;
 import com.nish.android.playground.common.ViewEventBus;
-import com.nish.android.playground.usecase.MessageUseCase;
 
 import javax.inject.Inject;
 
-import androidx.databinding.ObservableField;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.OnLifecycleEvent;
 
 public class SplashViewModel extends BaseViewModel {
 
-    public ObservableField<String> welcomeMessage = new ObservableField<>();
-
     private ViewEventBus viewEventBus;
-    private UseCaseDataProvider useCaseDataProvider;
+    private SharedPrefUtil sharedPrefUtil;
 
     @Inject
-    public SplashViewModel(UseCaseDataProvider useCaseDataProvider, ViewEventBus eventBus) {
-        this.useCaseDataProvider = useCaseDataProvider;
+    public SplashViewModel(SharedPrefUtil sharedPrefUtil, ViewEventBus eventBus) {
+        this.sharedPrefUtil = sharedPrefUtil;
         this.viewEventBus = eventBus;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
-        subscribeOn(useCaseDataProvider.observeUseCase(MessageUseCase.class)
-                .subscribe(clazz -> onSuccess(), throwable -> onError()));
+        if(TextUtils.isEmpty(sharedPrefUtil.getOAuthToken())) {
+            launchLoginActivity();
+        } else {
+            launchLandingActivity();
+        }
     }
 
-    private void onError() {
-
-    }
-
-    private void onSuccess() {
-        welcomeMessage.set(useCaseDataProvider.get(MessageUseCase.class).getMessage());
-
+    private void launchLoginActivity() {
         StartActivityEvent event = StartActivityEvent.getEventBuilder(this)
-                .setActivity(LandingActivity.class)
+                .setActivity(LoginActivity.class)
+                .setFinishActivity(true)
                 .build();
 
         viewEventBus.send(event);
     }
 
-    public void launchLanding() {
-        MessageUseCase useCase = new MessageUseCase("Welcome Play ground..!");
-        useCaseDataProvider.save(useCase);
+    private void launchLandingActivity() {
+        StartActivityEvent event = StartActivityEvent.getEventBuilder(this)
+                .setActivity(LandingActivity.class)
+                .setFinishActivity(true)
+                .build();
+
+        viewEventBus.send(event);
     }
 }

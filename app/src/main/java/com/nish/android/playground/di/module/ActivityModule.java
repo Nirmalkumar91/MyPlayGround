@@ -1,6 +1,7 @@
 package com.nish.android.playground.di.module;
 
 import com.nish.android.playground.activity.LandingActivity;
+import com.nish.android.playground.activity.LoginActivity;
 import com.nish.android.playground.activity.SplashActivity;
 
 import dagger.Module;
@@ -11,6 +12,9 @@ public abstract class ActivityModule {
 
     @ContributesAndroidInjector
     abstract SplashActivity bindSplashActivity();
+
+    @ContributesAndroidInjector
+    abstract LoginActivity bindLoginActivity();
 
     @ContributesAndroidInjector
     abstract LandingActivity bindLandingActivity();

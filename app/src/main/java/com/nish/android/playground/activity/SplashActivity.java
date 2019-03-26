@@ -16,10 +16,10 @@ import io.reactivex.disposables.CompositeDisposable;
 public class SplashActivity extends BaseActivity {
 
     @Inject
-    SplashViewModel splashViewModel;
+    protected SplashViewModel splashViewModel;
 
     @Inject
-    ViewEventBus eventBus;
+    protected ViewEventBus eventBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
