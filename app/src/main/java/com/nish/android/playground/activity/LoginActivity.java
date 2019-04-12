@@ -61,10 +61,10 @@ public class LoginActivity extends BaseActivity {
                 String code = data.getQueryParameter(CODE);
                 String error = data.getQueryParameter(ERROR_CODE);
                 if (!TextUtils.isEmpty(code)) {
-                    sharedPrefUtil.setOAuthToken(code);
+                    sharedPrefUtil.setOAuthCode(code);
                 }
                 if(!TextUtils.isEmpty(error)) {
-                    sharedPrefUtil.clearAuthToken();
+                    sharedPrefUtil.clearAuthCode();
                 }
             }
         }

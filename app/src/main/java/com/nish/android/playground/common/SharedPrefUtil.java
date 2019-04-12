@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class SharedPrefUtil {
+    private final String PREF_OAUTH_CODE = "pref_oauth_code";
     private final String PREF_OAUTH_TOKEN = "pref_oauth_token";
     private SharedPreferences sharedPreferences;
 
@@ -15,8 +16,16 @@ public class SharedPrefUtil {
         this.sharedPreferences = sharedPreferences;
     }
 
-    public String getOAuthToken() {
-        return getString(PREF_OAUTH_TOKEN);
+    public String getOAuthCode() {
+        return getString(PREF_OAUTH_CODE);
+    }
+
+    public void setOAuthCode(String code) {
+        putString(PREF_OAUTH_CODE, code);
+    }
+
+    public void clearAuthCode() {
+        putString(PREF_OAUTH_CODE, null);
     }
 
     public void setOAuthToken(String token) {
@@ -25,6 +34,10 @@ public class SharedPrefUtil {
 
     public void clearAuthToken() {
         putString(PREF_OAUTH_TOKEN, null);
+    }
+
+    public String getOAuthToken() {
+        return getString(PREF_OAUTH_TOKEN);
     }
 
     private void putString(String key, String value) {

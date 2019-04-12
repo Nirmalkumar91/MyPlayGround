@@ -27,7 +27,7 @@ public class SplashViewModel extends BaseViewModel {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
-        if(TextUtils.isEmpty(sharedPrefUtil.getOAuthToken())) {
+        if(TextUtils.isEmpty(sharedPrefUtil.getOAuthCode()) || TextUtils.isEmpty(sharedPrefUtil.getOAuthToken())) {
             launchLoginActivity();
         } else {
             launchLandingActivity();
