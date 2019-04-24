@@ -16,12 +16,14 @@ import com.nish.android.playground.oauth.OAuthTokenProvider;
 
 import javax.inject.Inject;
 
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.OnLifecycleEvent;
 import okhttp3.HttpUrl;
 
 public class LoginViewModel extends BaseViewModel {
 
+    public ObservableField<String> emailId = new ObservableField<>();
     private ViewEventBus viewEventBus;
     private SharedPrefUtil sharedPrefUtil;
     private OAuthTokenProvider oAuthTokenProvider;
@@ -45,6 +47,7 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     public void launchGoogleLogin() {
+        sharedPrefUtil.setUserEmail(emailId.get());
         StartActivityEvent startActivityEvent = StartActivityEvent.getEventBuilder(this)
                 .isExternalApp(true)
                 .setIntent(getAuthorizationIntent())
@@ -54,6 +57,9 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     private void onAuthFailure(Throwable throwable) {
+        sharedPrefUtil.clearAuthCode();
+        sharedPrefUtil.clearAuthToken();
+        sharedPrefUtil.clearEmail();
         Log.e("LOGIN", "Login failed", throwable);
     }
 
@@ -63,8 +69,8 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     private Intent getAuthorizationIntent() {
-        HttpUrl authorizeUrl = HttpUrl.parse("https://accounts.google.com/o/oauth2/v2/auth") //
-                .newBuilder() //
+        HttpUrl authorizeUrl = HttpUrl.parse("https://accounts.google.com/o/oauth2/v2/auth")
+                .newBuilder()
                 .addQueryParameter("client_id", AppConstants.CLIENT_ID)
                 .addQueryParameter("scope", AppConstants.API_SCOPE)
                 .addQueryParameter("redirect_uri", AppConstants.REDIRECT_URI)

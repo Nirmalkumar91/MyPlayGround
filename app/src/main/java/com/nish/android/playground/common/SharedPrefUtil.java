@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 public class SharedPrefUtil {
     private final String PREF_OAUTH_CODE = "pref_oauth_code";
     private final String PREF_OAUTH_TOKEN = "pref_oauth_token";
+    private final String PREF_USER_EMAIL = "pref_user_email";
     private SharedPreferences sharedPreferences;
 
     @Inject
@@ -38,6 +39,18 @@ public class SharedPrefUtil {
 
     public String getOAuthToken() {
         return getString(PREF_OAUTH_TOKEN);
+    }
+
+    public String getUserEmail() {
+        return getString(PREF_USER_EMAIL);
+    }
+
+    public void setUserEmail(String email) {
+        putString(PREF_USER_EMAIL, email);
+    }
+
+    public void clearEmail() {
+        putString(PREF_USER_EMAIL, null);
     }
 
     private void putString(String key, String value) {

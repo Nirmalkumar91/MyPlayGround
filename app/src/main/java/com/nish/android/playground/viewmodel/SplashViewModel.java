@@ -1,6 +1,7 @@
 package com.nish.android.playground.viewmodel;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.nish.android.playground.activity.LandingActivity;
 import com.nish.android.playground.activity.LoginActivity;
@@ -30,6 +31,8 @@ public class SplashViewModel extends BaseViewModel {
         if(TextUtils.isEmpty(sharedPrefUtil.getOAuthCode()) || TextUtils.isEmpty(sharedPrefUtil.getOAuthToken())) {
             launchLoginActivity();
         } else {
+            Log.d("********", "Auth code: " + sharedPrefUtil.getOAuthCode());
+            Log.d("********", "Access token: " + sharedPrefUtil.getOAuthToken());
             launchLandingActivity();
         }
     }

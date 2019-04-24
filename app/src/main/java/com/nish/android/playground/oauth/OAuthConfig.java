@@ -1,6 +1,6 @@
-package com.nish.android.playground.network;
+package com.nish.android.playground.oauth;
 
-public class RetrofitUtil {
+public class OAuthConfig {
 
     public static final String BASE_URL = "https://www.googleapis.com/";
 
