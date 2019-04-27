@@ -23,7 +23,7 @@ import okhttp3.HttpUrl;
 
 public class LoginViewModel extends BaseViewModel {
 
-    public ObservableField<String> emailId = new ObservableField<>();
+    public ObservableField<String> emailId = new ObservableField<>("dare.lamrin@googlemail.com");
     private ViewEventBus viewEventBus;
     private SharedPrefUtil sharedPrefUtil;
     private OAuthTokenProvider oAuthTokenProvider;

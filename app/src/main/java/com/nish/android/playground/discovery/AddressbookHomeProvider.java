@@ -13,21 +13,32 @@ public class AddressbookHomeProvider {
 
     private AddressBookHomeService addressBookHomeService;
     private SharedPrefUtil sharedPrefUtil;
+    private AddressbookConfig addressbookConfig;
     private SchedulerTransformer schedulerTransformer;
 
     @Inject
-    public AddressbookHomeProvider(AddressBookHomeService addressBookHomeService, SharedPrefUtil sharedPrefUtil, SchedulerTransformer schedulerTransformer) {
+    public AddressbookHomeProvider(AddressBookHomeService addressBookHomeService, SharedPrefUtil sharedPrefUtil, AddressbookConfig addressbookConfig, SchedulerTransformer schedulerTransformer) {
         this.addressBookHomeService = addressBookHomeService;
         this.sharedPrefUtil = sharedPrefUtil;
+        this.addressbookConfig = addressbookConfig;
         this.schedulerTransformer = schedulerTransformer;
     }
 
     public Observable<DavMultiStatus> getAddressbookHome() {
+        RequestBody body = RequestBody.create(MediaType.parse("application/xml"),
+                addressbookConfig.getRequestBody(Properties.RESOURCE_TYPE, Properties.ADDRESSBOOK_HOME_SET));
+        return addressBookHomeService.getAddressbookHomeSet(AddressbookConfig.getAddressbookHomeSetPath(sharedPrefUtil.getUserEmail()),
+                        body, "Bearer " + sharedPrefUtil.getOAuthToken())
+                .compose(schedulerTransformer.getSchedulerTransformer());
+    }
+
+    public Observable<DavMultiStatus> getAddressbook() {
         RequestBody body =
-                RequestBody.create(MediaType.parse("application/xml"), AddressbookConfig.ADDRESSBOOK_HOME_REQ);
+                RequestBody.create(MediaType.parse("application/xml"),
+                        addressbookConfig.getRequestBody(Properties.RESOURCE_TYPE, Properties.DISPLAY_NAME));
         return addressBookHomeService
-                .getAddressbookHomeSet(AddressbookConfig.ADDRESSBOOK_HOME_URL + sharedPrefUtil.getUserEmail(),
-                        body, "Bearer " + sharedPrefUtil.getOAuthToken(), "application/xml")
+                .getAddressbook(addressbookConfig.getAddressbookUrl(),
+                        body, "Bearer " + sharedPrefUtil.getOAuthToken(), "1")
                 .compose(schedulerTransformer.getSchedulerTransformer());
     }
 }

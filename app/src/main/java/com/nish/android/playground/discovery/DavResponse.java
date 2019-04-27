@@ -5,11 +5,11 @@ import org.simpleframework.xml.Namespace;
 
 public class DavResponse {
 
-    @Element(name = "href")
+    @Element(name = "href", required = false)
     @Namespace(prefix = "d")
     String href;
 
-    @Element(name = "propstat")
+    @Element(name = "propstat", required = false)
     @Namespace(prefix = "d")
     DavPropStat propstat;
 

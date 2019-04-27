@@ -31,8 +31,8 @@ public class SplashViewModel extends BaseViewModel {
         if(TextUtils.isEmpty(sharedPrefUtil.getOAuthCode()) || TextUtils.isEmpty(sharedPrefUtil.getOAuthToken())) {
             launchLoginActivity();
         } else {
-            Log.d("********", "Auth code: " + sharedPrefUtil.getOAuthCode());
-            Log.d("********", "Access token: " + sharedPrefUtil.getOAuthToken());
+            Log.e("********", "Auth code: " + sharedPrefUtil.getOAuthCode());
+            Log.e("********", "Access token: " + sharedPrefUtil.getOAuthToken());
             launchLandingActivity();
         }
     }

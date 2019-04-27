@@ -41,7 +41,11 @@ public interface AddressBookHomeService {
 
     @HTTP(method = "PROPFIND", hasBody = true)
     Observable<DavMultiStatus> getAddressbookHomeSet(@Url String url, @Body RequestBody body,
-                                                     @Header("Authorization") String accessToken,
-                                                     @Header("Content-Type") String type);
+                                                     @Header("Authorization") String accessToken);
 
+
+    @HTTP(method = "PROPFIND", hasBody = true)
+    Observable<DavMultiStatus> getAddressbook(@Url String url, @Body RequestBody body,
+                                              @Header("Authorization") String accessToken,
+                                              @Header("Depth") String depth);
 }

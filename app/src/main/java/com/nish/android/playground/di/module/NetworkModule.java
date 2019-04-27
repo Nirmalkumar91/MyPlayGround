@@ -12,6 +12,7 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 @Module
 public class NetworkModule {
@@ -35,8 +36,11 @@ public class NetworkModule {
     @Provides
     @Singleton
     OkHttpClient provideOkhttpClient(Cache cache) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder client = new OkHttpClient.Builder();
         client.cache(cache);
+        client.addInterceptor(logging);
         return client.build();
     }
 }

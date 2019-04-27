@@ -1,9 +1,12 @@
 package com.nish.android.playground.discovery;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.NamespaceList;
 import org.simpleframework.xml.Root;
+
+import java.util.List;
 
 @Root(name = "d:multistatus")
 @NamespaceList({
@@ -13,10 +16,11 @@ import org.simpleframework.xml.Root;
 })
 public class DavMultiStatus {
 
-    @Element(name = "response")
-    DavResponse response;
+    @ElementList(entry = "response", inline = true, required = false)
+    @Namespace(prefix = "d")
+    List<DavResponse> responseList;
 
-    public DavResponse getResponse() {
-        return response;
+    public List<DavResponse> getResponses() {
+        return responseList;
     }
 }

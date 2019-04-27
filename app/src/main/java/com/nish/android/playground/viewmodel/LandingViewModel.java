@@ -27,18 +27,36 @@ public class LandingViewModel extends BaseViewModel {
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
         if(!TextUtils.isEmpty(sharedPrefUtil.getUserEmail())) {
-            subscribeOn(addressbookHomeProvider.getAddressbookHome().subscribe(this::onSuccess, this::onError));
+            subscribeOn(addressbookHomeProvider.getAddressbookHome().subscribe(this::onAddressbookHomeSetSuccess, this::onAddressbookHomeSetError));
         }
     }
 
-    private void onError(Throwable throwable) {
+    private void onAddressbookHomeSetError(Throwable throwable) {
         Log.e("*******", throwable.getMessage(), throwable);
     }
 
-    private void onSuccess(DavMultiStatus davMultiStatus) {
-        Log.e("*******", davMultiStatus.getResponse().getPropstat().getStatus());
-        Log.e("*******", davMultiStatus.getResponse().getPropstat().getProp().getAddressbookHome().getHref());
+    private void onAddressbookHomeSetSuccess(DavMultiStatus davMultiStatus) {
+        Log.e("*******", davMultiStatus.getResponses().get(0).getPropstat().getStatus());
+        Log.e("*******", davMultiStatus.getResponses().get(0).getPropstat().getProp().getAddressbookHome().getHref());
 
+        sharedPrefUtil.setAddressbookUrl(davMultiStatus.getResponses().get(0).getPropstat().getProp().getAddressbookHome().getHref());
+        subscribeOn(addressbookHomeProvider.getAddressbook().subscribe(this::onAddressbookSuccess, this::onAddressbookHomeSetError));
+    }
+
+    private void onAddressbookSuccess(DavMultiStatus davMultiStatus) {
+        Log.e("*******", davMultiStatus.getResponses().get(0).getHref());
+        Log.e("*******", davMultiStatus.getResponses().get(0).getPropstat().getStatus());
+        Log.e("*******", davMultiStatus.getResponses().get(0).getPropstat().getProp().getDisplayName());
+        Log.e("*******", "is Coll :" + davMultiStatus.getResponses().get(0).getPropstat().getProp().getResourceType().getCollection());
+        Log.e("*******", "is AB :" + davMultiStatus.getResponses().get(0).getPropstat().getProp().getResourceType().getAddressbook());
+        Log.e("*******", "is Prin :" + davMultiStatus.getResponses().get(0).getPropstat().getProp().getResourceType().getPrincipal());
+
+        Log.e("*******", davMultiStatus.getResponses().get(1).getHref());
+        Log.e("*******", davMultiStatus.getResponses().get(1).getPropstat().getStatus());
+        Log.e("*******", davMultiStatus.getResponses().get(1).getPropstat().getProp().getDisplayName());
+        Log.e("*******", "is Coll :" + davMultiStatus.getResponses().get(1).getPropstat().getProp().getResourceType().getCollection());
+        Log.e("*******", "is AB :" + davMultiStatus.getResponses().get(1).getPropstat().getProp().getResourceType().getAddressbook());
+        Log.e("*******", "is Prin :" + davMultiStatus.getResponses().get(1).getPropstat().getProp().getResourceType().getPrincipal());
 
     }
 
