@@ -22,15 +22,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="com.nish.android.nishcontacts" />
-            </intent-filter>
-        </activity>
-
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.WebLoginActivity"/>
+        <activity android:name=".activity.SyncActivity"/>
         <activity android:name=".activity.LandingActivity"/>
 
     </application>
