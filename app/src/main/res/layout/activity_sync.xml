@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="com.nish.android.playground.viewmodel.SyncViewModel" />
+            type="com.nish.android.playground.sync.SyncViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

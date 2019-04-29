@@ -1,10 +1,9 @@
 package com.nish.android.playground.di.module;
 
-import com.nish.android.playground.activity.LandingActivity;
-import com.nish.android.playground.activity.LoginActivity;
-import com.nish.android.playground.activity.SplashActivity;
-import com.nish.android.playground.activity.SyncActivity;
-import com.nish.android.playground.activity.WebLoginActivity;
+import com.nish.android.playground.landing.LandingActivity;
+import com.nish.android.playground.splash.SplashActivity;
+import com.nish.android.playground.sync.SyncActivity;
+import com.nish.android.playground.login.WebLoginActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -14,9 +13,6 @@ public abstract class ActivityModule {
 
     @ContributesAndroidInjector
     abstract SplashActivity bindSplashActivity();
-
-    @ContributesAndroidInjector
-    abstract LoginActivity bindLoginActivity();
 
     @ContributesAndroidInjector
     abstract WebLoginActivity bindWebLoginActivity();

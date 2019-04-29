@@ -1,13 +1,11 @@
-package com.nish.android.playground.viewmodel;
+package com.nish.android.playground.login;
 
-import com.nish.android.playground.activity.SyncActivity;
+import com.nish.android.playground.sync.SyncActivity;
 import com.nish.android.playground.common.BaseViewModel;
 import com.nish.android.playground.common.SharedPrefUtil;
 import com.nish.android.playground.common.UseCaseDataProvider;
 import com.nish.android.playground.common.ViewEventBus;
 import com.nish.android.playground.common.events.StartActivityEvent;
-import com.nish.android.playground.login.LoginConfig;
-import com.nish.android.playground.login.LoginWebViewClient;
 import com.nish.android.playground.usecase.LoginUseCase;
 
 import javax.inject.Inject;
@@ -40,7 +38,8 @@ public class WebLoginViewModel extends BaseViewModel {
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
         url = loginConfig.getWebLoginUrl(sharedPrefUtil.getUserEmail());
-        userAgent = "com.nish.android.playground";
+        //userAgent = "com.nish.android.playground";
+        userAgent = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36";
         subscribeOn(useCaseDataProvider.observeUseCase(LoginUseCase.class).subscribe(clazz -> onLoginComplete()));
     }
 

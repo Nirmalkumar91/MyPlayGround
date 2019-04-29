@@ -1,14 +1,14 @@
-package com.nish.android.playground.viewmodel;
+package com.nish.android.playground.splash;
 
-import android.text.TextUtils;
 import android.util.Log;
 
-import com.nish.android.playground.activity.LandingActivity;
-import com.nish.android.playground.activity.LoginActivity;
+import com.nish.android.playground.sync.SyncActivity;
+import com.nish.android.playground.login.WebLoginActivity;
 import com.nish.android.playground.common.BaseViewModel;
 import com.nish.android.playground.common.SharedPrefUtil;
 import com.nish.android.playground.common.events.StartActivityEvent;
 import com.nish.android.playground.common.ViewEventBus;
+import com.nish.android.playground.oauth.TokenValidator;
 
 import javax.inject.Inject;
 
@@ -19,36 +19,37 @@ public class SplashViewModel extends BaseViewModel {
 
     private ViewEventBus viewEventBus;
     private SharedPrefUtil sharedPrefUtil;
+    private TokenValidator tokenValidator;
 
     @Inject
-    public SplashViewModel(SharedPrefUtil sharedPrefUtil, ViewEventBus eventBus) {
+    public SplashViewModel(SharedPrefUtil sharedPrefUtil, ViewEventBus eventBus, TokenValidator tokenValidator) {
         this.sharedPrefUtil = sharedPrefUtil;
         this.viewEventBus = eventBus;
+        this.tokenValidator = tokenValidator;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
-        if(TextUtils.isEmpty(sharedPrefUtil.getOAuthCode()) || TextUtils.isEmpty(sharedPrefUtil.getOAuthToken())) {
-            launchLoginActivity();
+        if(tokenValidator.isTokenValid()) {
+            Log.d("********", "Access token: " + sharedPrefUtil.getOAuthToken());
+            launchSyncActivity();
         } else {
-            Log.e("********", "Auth code: " + sharedPrefUtil.getOAuthCode());
-            Log.e("********", "Access token: " + sharedPrefUtil.getOAuthToken());
-            launchLandingActivity();
+            launchLoginActivity();
         }
     }
 
     private void launchLoginActivity() {
         StartActivityEvent event = StartActivityEvent.getEventBuilder(this)
-                .setActivity(LoginActivity.class)
+                .setActivity(WebLoginActivity.class)
                 .setFinishActivity(true)
                 .build();
 
         viewEventBus.send(event);
     }
 
-    private void launchLandingActivity() {
+    private void launchSyncActivity() {
         StartActivityEvent event = StartActivityEvent.getEventBuilder(this)
-                .setActivity(LandingActivity.class)
+                .setActivity(SyncActivity.class)
                 .setFinishActivity(true)
                 .build();
 

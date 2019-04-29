@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="com.nish.android.playground.viewmodel.LandingViewModel" />
+            type="com.nish.android.playground.landing.LandingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

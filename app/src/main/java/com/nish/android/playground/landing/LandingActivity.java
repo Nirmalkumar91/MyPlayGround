@@ -1,10 +1,9 @@
-package com.nish.android.playground.activity;
+package com.nish.android.playground.landing;
 
 import android.os.Bundle;
 import com.nish.android.playground.R;
 import com.nish.android.playground.common.BaseActivity;
 import com.nish.android.playground.databinding.ActivityLandingBinding;
-import com.nish.android.playground.viewmodel.LandingViewModel;
 
 import javax.inject.Inject;
 

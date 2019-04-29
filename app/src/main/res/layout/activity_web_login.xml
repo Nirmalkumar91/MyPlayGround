@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="com.nish.android.playground.viewmodel.WebLoginViewModel" />
+            type="com.nish.android.playground.login.WebLoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

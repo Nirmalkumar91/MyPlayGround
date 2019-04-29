@@ -8,14 +8,16 @@ import androidx.databinding.BindingAdapter;
 
 public class WebBindingAdapter {
 
-    @BindingAdapter("setWebViewClient")
-    public static void setWebViewClient(WebView view, WebViewClient client) {
+    @BindingAdapter({"setWebViewClient", "userAgent"})
+    public static void setWebViewClient(WebView view, WebViewClient client, String userAgent) {
         view.setWebViewClient(client);
         WebSettings webSettings = view.getSettings();
+        webSettings.setUserAgentString(userAgent);
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAppCacheEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setSupportMultipleWindows(true);
+        webSettings.setLoadWithOverviewMode(true);
     }
 
     @BindingAdapter("loadUrl")
@@ -23,8 +25,4 @@ public class WebBindingAdapter {
         view.loadUrl(url);
     }
 
-    @BindingAdapter("userAgent")
-    public static void setUserAgent(WebView view, String userAgent) {
-        view.getSettings().setUserAgentString(userAgent);
-    }
 }
