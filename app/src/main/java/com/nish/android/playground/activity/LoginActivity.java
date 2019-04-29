@@ -1,9 +1,6 @@
 package com.nish.android.playground.activity;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import com.nish.android.playground.R;
 import com.nish.android.playground.common.BaseActivity;

@@ -39,7 +39,7 @@ public class WebLoginViewModel extends BaseViewModel {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
-        url = loginConfig.getWebLoginUrl();
+        url = loginConfig.getWebLoginUrl(sharedPrefUtil.getUserEmail());
         userAgent = "com.nish.android.playground";
         subscribeOn(useCaseDataProvider.observeUseCase(LoginUseCase.class).subscribe(clazz -> onLoginComplete()));
     }

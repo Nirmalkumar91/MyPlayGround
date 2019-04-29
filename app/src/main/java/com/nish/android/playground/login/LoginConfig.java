@@ -15,13 +15,15 @@ public class LoginConfig {
 
     }
 
-    public String getWebLoginUrl() {
+    public String getWebLoginUrl(String email) {
         HttpUrl webLoginUrl = HttpUrl.parse(URL)
                 .newBuilder()
                 .addQueryParameter("client_id", AppConstants.CLIENT_ID)
                 .addQueryParameter("scope", AppConstants.API_SCOPE)
                 .addQueryParameter("redirect_uri", AppConstants.REDIRECT_URI)
                 .addQueryParameter("response_type", AppConstants.CODE)
+                .addQueryParameter("access_type", AppConstants.ACCESS_TYPE)
+                .addQueryParameter("login_hint", email)
                 .build();
         return webLoginUrl.toString();
     }

@@ -26,4 +26,14 @@ public class OAuthTokenProvider {
                 .requestToken(sharedPrefUtil.getOAuthCode(), AppConstants.CLIENT_ID, AppConstants.REDIRECT_URI, AppConstants.GRANT_TYPE_AUTHORIZATION_CODE)
                 .compose(schedulerTransformer.getSchedulerTransformer());
     }
+
+    public Observable<OAuthToken> refreshAccessToken() {
+        return oAuthService
+                .refreshToken("Refresh token", AppConstants.CLIENT_ID, AppConstants.GRANT_TYPE_REFRESH_TOKEN)
+                .compose(schedulerTransformer.getSchedulerTransformer());
+    }
+
+    public Observable<String> revokeToken() {
+        return null;
+    }
 }

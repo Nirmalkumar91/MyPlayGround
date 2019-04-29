@@ -10,8 +10,12 @@ import com.nish.android.playground.common.ViewEventBus;
 import com.nish.android.playground.common.events.StartActivityEvent;
 import com.nish.android.playground.discovery.AddressbookHomeProvider;
 import com.nish.android.playground.discovery.DavMultiStatus;
+import com.nish.android.playground.oauth.DecoderUtil;
 import com.nish.android.playground.oauth.OAuthToken;
 import com.nish.android.playground.oauth.OAuthTokenProvider;
+import com.nish.android.playground.oauth.UserProfile;
+
+import java.io.UnsupportedEncodingException;
 
 import javax.inject.Inject;
 
@@ -22,13 +26,15 @@ public class SyncViewModel extends BaseViewModel {
 
     private ViewEventBus viewEventBus;
     private SharedPrefUtil sharedPrefUtil;
+    private DecoderUtil decoderUtil;
     private OAuthTokenProvider oAuthTokenProvider;
     private AddressbookHomeProvider addressbookHomeProvider;
 
     @Inject
-    public SyncViewModel(ViewEventBus eventBus, SharedPrefUtil sharedPrefUtil, OAuthTokenProvider oAuthTokenProvider, AddressbookHomeProvider addressbookHomeProvider) {
+    public SyncViewModel(ViewEventBus eventBus, SharedPrefUtil sharedPrefUtil, DecoderUtil decoderUtil, OAuthTokenProvider oAuthTokenProvider, AddressbookHomeProvider addressbookHomeProvider) {
         this.viewEventBus = eventBus;
         this.sharedPrefUtil = sharedPrefUtil;
+        this.decoderUtil = decoderUtil;
         this.oAuthTokenProvider = oAuthTokenProvider;
         this.addressbookHomeProvider = addressbookHomeProvider;
     }
@@ -43,6 +49,28 @@ public class SyncViewModel extends BaseViewModel {
             }
         }
     }
+
+
+    private void onAuthFailure(Throwable throwable) {
+        sharedPrefUtil.clearAuthCode();
+        sharedPrefUtil.clearAuthToken();
+        sharedPrefUtil.clearEmail();
+        Log.e("LOGIN", "Login failed", throwable);
+    }
+
+    private void onAuthSuccess(OAuthToken oAuthToken) {
+        sharedPrefUtil.setOAuthToken(oAuthToken.getAccessToken());
+        try {
+            UserProfile userProfile = decoderUtil.decodeIdToken(oAuthToken.getIdToken());
+            Log.e("********", userProfile.getEmail());
+            Log.e("********", userProfile.getName());
+        } catch (UnsupportedEncodingException e) {
+            Log.e("********", e.getMessage(), e);
+        }
+
+        syncContacts();
+    }
+
 
     private void syncContacts() {
         if(!TextUtils.isEmpty(sharedPrefUtil.getUserEmail())) {
@@ -81,18 +109,6 @@ public class SyncViewModel extends BaseViewModel {
         Log.e("*******", "is AB :" + davMultiStatus.getResponses().get(1).getPropstat().getProp().getResourceType().getAddressbook());
         Log.e("*******", "is Prin :" + davMultiStatus.getResponses().get(1).getPropstat().getProp().getResourceType().getPrincipal());
 
-    }
-
-    private void onAuthFailure(Throwable throwable) {
-        sharedPrefUtil.clearAuthCode();
-        sharedPrefUtil.clearAuthToken();
-        sharedPrefUtil.clearEmail();
-        Log.e("LOGIN", "Login failed", throwable);
-    }
-
-    private void onAuthSuccess(OAuthToken oAuthToken) {
-        sharedPrefUtil.setOAuthToken(oAuthToken.getAccessToken());
-        syncContacts();
     }
 
     private void launchLandingActivity() {
