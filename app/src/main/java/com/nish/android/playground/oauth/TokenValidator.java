@@ -1,21 +1,17 @@
 package com.nish.android.playground.oauth;
 
-import android.text.TextUtils;
-
-import com.nish.android.playground.common.SharedPrefUtil;
+import com.nish.android.playground.repository.UserProfileEntity;
 
 import javax.inject.Inject;
 
 public class TokenValidator {
 
-    private SharedPrefUtil sharedPrefUtil;
-
     @Inject
-    public TokenValidator(SharedPrefUtil sharedPrefUtil) {
-        this.sharedPrefUtil = sharedPrefUtil;
+    public TokenValidator() {
+
     }
 
-    public boolean isTokenValid() {
-        return !TextUtils.isEmpty(sharedPrefUtil.getOAuthToken());
+    public boolean isTokenValid(UserProfileEntity profile) {
+        return true;
     }
 }

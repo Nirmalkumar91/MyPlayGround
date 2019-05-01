@@ -11,4 +11,5 @@ public class AppConstants {
     public static final String ERROR_CODE = "error";
     public static final String GRANT_TYPE_AUTHORIZATION_CODE = "authorization_code";
     public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
+    public static final String APP_ID = "com.nish.android.nishcontacts";
 }

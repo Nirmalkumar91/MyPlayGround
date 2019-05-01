@@ -1,13 +1,13 @@
-package com.nish.android.playground.usecase;
+package com.nish.android.playground.login;
 
 import com.nish.android.playground.common.UseCase;
 
-public class LoginUseCase extends UseCase {
+public class WebLoginUseCase extends UseCase {
 
     private String authCode;
     private String error;
 
-    public LoginUseCase(String authCode, String error) {
+    public WebLoginUseCase(String authCode, String error) {
         this.authCode = authCode;
         this.error = error;
     }

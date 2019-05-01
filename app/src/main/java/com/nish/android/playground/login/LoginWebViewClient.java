@@ -7,7 +7,6 @@ import android.webkit.WebViewClient;
 
 import com.nish.android.playground.AppConstants;
 import com.nish.android.playground.common.UseCaseDataProvider;
-import com.nish.android.playground.usecase.LoginUseCase;
 
 import javax.inject.Inject;
 
@@ -28,7 +27,7 @@ public class LoginWebViewClient extends WebViewClient {
             Log.e("********", "Auth success: " + url);
             String code = uri.getQueryParameter(AppConstants.CODE);
             String error = uri.getQueryParameter(AppConstants.ERROR_CODE);
-            useCaseDataProvider.save(new LoginUseCase(code, error));
+            useCaseDataProvider.save(new WebLoginUseCase(code, error));
             return true;
         }
         return false;

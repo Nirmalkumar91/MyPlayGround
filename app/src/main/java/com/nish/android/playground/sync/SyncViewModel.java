@@ -3,6 +3,7 @@ package com.nish.android.playground.sync;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.nish.android.playground.common.UseCaseDataProvider;
 import com.nish.android.playground.landing.LandingActivity;
 import com.nish.android.playground.common.BaseViewModel;
 import com.nish.android.playground.common.SharedPrefUtil;
@@ -10,10 +11,13 @@ import com.nish.android.playground.common.ViewEventBus;
 import com.nish.android.playground.common.events.StartActivityEvent;
 import com.nish.android.playground.discovery.AddressbookHomeProvider;
 import com.nish.android.playground.discovery.DavMultiStatus;
+import com.nish.android.playground.login.WebLoginUseCase;
 import com.nish.android.playground.oauth.DecoderUtil;
 import com.nish.android.playground.oauth.OAuthToken;
 import com.nish.android.playground.oauth.OAuthTokenProvider;
 import com.nish.android.playground.oauth.UserProfile;
+import com.nish.android.playground.repository.NishRepository;
+import com.nish.android.playground.repository.UserProfileEntity;
 
 import java.io.UnsupportedEncodingException;
 
@@ -26,27 +30,37 @@ public class SyncViewModel extends BaseViewModel {
 
     private ViewEventBus viewEventBus;
     private SharedPrefUtil sharedPrefUtil;
+    private UseCaseDataProvider useCaseDataProvider;
     private DecoderUtil decoderUtil;
     private OAuthTokenProvider oAuthTokenProvider;
     private AddressbookHomeProvider addressbookHomeProvider;
+    private NishRepository nishRepository;
 
     @Inject
-    public SyncViewModel(ViewEventBus eventBus, SharedPrefUtil sharedPrefUtil, DecoderUtil decoderUtil, OAuthTokenProvider oAuthTokenProvider, AddressbookHomeProvider addressbookHomeProvider) {
+    public SyncViewModel(ViewEventBus eventBus, SharedPrefUtil sharedPrefUtil,
+                         UseCaseDataProvider useCaseDataProvider, DecoderUtil decoderUtil,
+                         OAuthTokenProvider oAuthTokenProvider, AddressbookHomeProvider addressbookHomeProvider,
+                         NishRepository nishRepository) {
         this.viewEventBus = eventBus;
         this.sharedPrefUtil = sharedPrefUtil;
+        this.useCaseDataProvider = useCaseDataProvider;
         this.decoderUtil = decoderUtil;
         this.oAuthTokenProvider = oAuthTokenProvider;
         this.addressbookHomeProvider = addressbookHomeProvider;
+        this.nishRepository = nishRepository;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void onResume() {
-        if(!TextUtils.isEmpty(sharedPrefUtil.getOAuthCode())) {
-            if(!TextUtils.isEmpty(sharedPrefUtil.getOAuthToken())) {
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    public void onCreate() {
+        WebLoginUseCase loginUseCase = useCaseDataProvider.get(WebLoginUseCase.class);
+        if (loginUseCase == null) {
+            if (!TextUtils.isEmpty(sharedPrefUtil.getOAuthToken())) {
                 syncContacts();
-            } else {
-                subscribeOn(oAuthTokenProvider.getAccessToken().subscribe(this::onAuthSuccess, this::onAuthFailure));
             }
+        } else if (!TextUtils.isEmpty(loginUseCase.getAuthCode()))  {
+            subscribeOn(oAuthTokenProvider.getAccessToken(loginUseCase.getAuthCode()).subscribe(this::onAuthSuccess, this::onAuthFailure));
+        } else {
+            Log.e("**********", "Login failed: " + loginUseCase.getError());
         }
     }
 
@@ -58,17 +72,27 @@ public class SyncViewModel extends BaseViewModel {
     }
 
     private void onAuthSuccess(OAuthToken oAuthToken) {
-        sharedPrefUtil.setOAuthToken(oAuthToken.getAccessToken());
         try {
             UserProfile userProfile = decoderUtil.decodeIdToken(oAuthToken.getIdToken());
             sharedPrefUtil.setUserEmail(userProfile.getEmail());
-            Log.e("********", userProfile.getEmail());
-            Log.e("********", userProfile.getName());
+            sharedPrefUtil.setOAuthToken(oAuthToken.getAccessToken());
+
+            UserProfileEntity userProfileEntity = new UserProfileEntity();
+            userProfileEntity.setEmail(userProfile.getEmail());
+            userProfileEntity.setAccessToken(oAuthToken.getAccessToken());
+            userProfileEntity.setRefreshToken(oAuthToken.getRefreshToken());
+            userProfileEntity.setFirstName(userProfile.getGivenName());
+            userProfileEntity.setLastName(userProfile.getFamilyName());
+            userProfileEntity.setName(userProfile.getName());
+            userProfileEntity.setPictureUrl(userProfile.getPicture());
+            userProfileEntity.setExpiryDate(0);
+
+            nishRepository.saveUserProfile(userProfileEntity);
+
+            syncContacts();
         } catch (UnsupportedEncodingException e) {
             Log.e("********", e.getMessage(), e);
         }
-
-        syncContacts();
     }
 
 
