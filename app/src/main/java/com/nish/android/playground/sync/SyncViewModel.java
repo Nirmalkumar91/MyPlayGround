@@ -50,8 +50,8 @@ public class SyncViewModel extends BaseViewModel {
         this.nishRepository = nishRepository;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    public void onCreate() {
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void onResume() {
         WebLoginUseCase loginUseCase = useCaseDataProvider.get(WebLoginUseCase.class);
         if (loginUseCase == null) {
             if (!TextUtils.isEmpty(sharedPrefUtil.getOAuthToken())) {

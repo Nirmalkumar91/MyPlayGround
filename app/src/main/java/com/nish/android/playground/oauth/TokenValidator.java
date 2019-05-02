@@ -12,6 +12,6 @@ public class TokenValidator {
     }
 
     public boolean isTokenValid(UserProfileEntity profile) {
-        return true;
+        return false;
     }
 }
