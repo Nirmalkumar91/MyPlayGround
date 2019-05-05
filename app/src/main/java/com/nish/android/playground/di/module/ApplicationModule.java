@@ -3,6 +3,7 @@ package com.nish.android.playground.di.module;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 
 import dagger.Module;
 import dagger.Provides;
@@ -27,7 +28,12 @@ public class ApplicationModule {
     }
 
     @Provides
-    SharedPreferences sharedPreferences() {
+    SharedPreferences provideSharedPreferences() {
         return application.getSharedPreferences("nish-preference", Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    PackageManager providePackageManager() {
+        return application.getPackageManager();
     }
 }

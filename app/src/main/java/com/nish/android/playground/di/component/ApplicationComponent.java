@@ -3,6 +3,7 @@ package com.nish.android.playground.di.component;
 import com.nish.android.playground.PlayGroundApplication;
 import com.nish.android.playground.di.module.ActivityModule;
 import com.nish.android.playground.di.module.ApplicationModule;
+import com.nish.android.playground.di.module.CommonModule;
 import com.nish.android.playground.di.module.DatabaseModule;
 import com.nish.android.playground.di.module.NetworkModule;
 import com.nish.android.playground.discovery.AddressbookHomeModule;
@@ -22,7 +23,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
         NetworkModule.class,
         OAuthServiceModule.class,
         AddressbookHomeModule.class,
-        DatabaseModule.class})
+        DatabaseModule.class,
+        CommonModule.class})
 public interface ApplicationComponent extends AndroidInjector<PlayGroundApplication> {
 
 }

@@ -3,7 +3,6 @@ package com.nish.android.playground.login;
 import com.nish.android.playground.common.BaseViewModel;
 import com.nish.android.playground.common.ViewEventBus;
 import com.nish.android.playground.common.events.OpenCustomTabEvent;
-import com.nish.android.playground.common.events.StartActivityEvent;
 
 import javax.inject.Inject;
 
@@ -33,14 +32,5 @@ public class LoginViewModel extends BaseViewModel {
                 .build();
 
         viewEventBus.send(customTabEvent);
-    }
-
-    private void launchWebLoginActivity() {
-        StartActivityEvent event = StartActivityEvent.getEventBuilder(this)
-                .setActivity(WebLoginActivity.class)
-                .setFinishActivity(true)
-                .build();
-
-        viewEventBus.send(event);
     }
 }

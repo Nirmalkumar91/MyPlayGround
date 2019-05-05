@@ -1,8 +1,8 @@
 package com.nish.android.playground.repository;
 
-import javax.inject.Inject;
+import com.nish.android.playground.oauth.UserProfile;
 
-import io.reactivex.Single;
+import javax.inject.Inject;
 
 public class NishRepository {
 
@@ -13,8 +13,23 @@ public class NishRepository {
         this.userProfileDao = userProfileDao;
     }
 
-    public Single<UserProfileEntity> getUserProfile(String email) {
-        return userProfileDao.getUserProfile(email);
+    public String getAccessToken(String email) {
+        return userProfileDao.getAccessToken(email);
+    }
+
+    public UserProfile getUserProfile(String email) {
+        return userProfileDao.getUserProfile(email).map(entity -> convertUserProfile(entity)).blockingGet();
+    }
+
+    private UserProfile convertUserProfile(UserProfileEntity entity) {
+        UserProfile userProfile = new UserProfile();
+        userProfile.setEmail(entity.getEmail());
+        userProfile.setName(entity.getName());
+        userProfile.setGivenName(entity.getFirstName());
+        userProfile.setFamilyName(entity.getLastName());
+        userProfile.setExpiryTime(entity.getLastName());
+        userProfile.setPicture(entity.getPictureUrl());
+        return userProfile;
     }
 
     public void saveUserProfile(UserProfileEntity userProfileEntity) {

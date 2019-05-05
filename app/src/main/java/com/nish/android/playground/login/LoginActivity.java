@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.nish.android.playground.AppConstants;
 import com.nish.android.playground.R;
 import com.nish.android.playground.common.BaseActivity;
-import com.nish.android.playground.common.SharedPrefUtil;
+import com.nish.android.playground.common.CustomTabHelper;
 import com.nish.android.playground.common.UseCaseDataProvider;
 import com.nish.android.playground.common.ViewEventBus;
 import com.nish.android.playground.databinding.ActivityLoginBinding;
@@ -31,6 +31,9 @@ public class LoginActivity extends BaseActivity {
     @Inject
     protected UseCaseDataProvider useCaseDataProvider;
 
+    @Inject
+    protected CustomTabHelper customTabHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
@@ -49,6 +52,11 @@ public class LoginActivity extends BaseActivity {
         events.add(eventBus.openCustomTab(LoginViewModel.class).subscribe(this::openCustomTab));
 
         return events;
+    }
+
+    @Override
+    protected String getCustomTabPackageName() {
+        return customTabHelper.getPackageNameToUse();
     }
 
     private void setAuthIntent(Intent intent) {

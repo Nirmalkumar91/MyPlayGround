@@ -2,9 +2,11 @@ package com.nish.android.playground.common;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import com.nish.android.playground.common.events.OpenCustomTabEvent;
 import com.nish.android.playground.common.events.StartActivityEvent;
+import com.nish.android.playground.login.WebLoginActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -52,8 +54,20 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void openCustomTab(OpenCustomTabEvent event) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(event.getUrl()));
+        String packageName = getCustomTabPackageName();
+        if(TextUtils.isEmpty(packageName)) {
+            Intent startIntent = new Intent(this, WebLoginActivity.class);
+            startActivity(startIntent);
+            finish();
+        } else {
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            CustomTabsIntent customTabsIntent = builder.build();
+            customTabsIntent.intent.setPackage(packageName);
+            customTabsIntent.launchUrl(this, Uri.parse(event.getUrl()));
+        }
+    }
+
+    protected String getCustomTabPackageName() {
+        return null;
     }
 }

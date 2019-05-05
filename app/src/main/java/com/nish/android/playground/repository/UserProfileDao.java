@@ -13,9 +13,12 @@ public interface UserProfileDao {
     @Query("SELECT * FROM " + UserProfileEntity.TABLE + " WHERE " + UserProfileEntity.COL_EMAIL + " LIKE :email")
     Single<UserProfileEntity> getUserProfile(String email);
 
+    @Query("SELECT " + UserProfileEntity.COL_ACCESS_TOKEN + " FROM " + UserProfileEntity.TABLE + " WHERE " + UserProfileEntity.COL_EMAIL + " LIKE :email")
+    String getAccessToken(String email);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(UserProfileEntity userProfile);
 
-    @Delete
-    void remove(UserProfileEntity userProfile);
+    @Query("DELETE FROM " + UserProfileEntity.TABLE + " WHERE " + UserProfileEntity.COL_EMAIL + " LIKE :email")
+    void deleteUserProfile(String email);
 }

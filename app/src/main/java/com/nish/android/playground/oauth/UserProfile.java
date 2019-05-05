@@ -45,4 +45,28 @@ public class UserProfile {
     public String getExpiryTime() {
         return expiryTime;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public void setExpiryTime(String expiryTime) {
+        this.expiryTime = expiryTime;
+    }
 }
