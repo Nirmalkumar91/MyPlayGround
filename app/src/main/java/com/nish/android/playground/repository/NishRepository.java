@@ -35,4 +35,8 @@ public class NishRepository {
     public void saveUserProfile(UserProfileEntity userProfileEntity) {
         userProfileDao.insert(userProfileEntity);
     }
+
+    public void clearUserProfile(String email) {
+        userProfileDao.deleteUserProfile(email);
+    }
 }

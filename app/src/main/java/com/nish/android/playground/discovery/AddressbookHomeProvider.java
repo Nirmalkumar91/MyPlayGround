@@ -34,17 +34,18 @@ public class AddressbookHomeProvider {
         RequestBody body = RequestBody.create(MediaType.parse("application/xml"),
                 addressbookConfig.getRequestBody(Properties.RESOURCE_TYPE, Properties.ADDRESSBOOK_HOME_SET));
         return addressBookHomeService.getAddressbookHomeSet(AddressbookConfig.getAddressbookHomeSetPath(email),
-                        body, "Bearer " + sharedPrefUtil.getOAuthToken())
+                        body, "Bearer " + nishRepository.getAccessToken(email))
                 .compose(schedulerTransformer.getSchedulerTransformer());
     }
 
     public Observable<DavMultiStatus> getAddressbook() {
+        String email = sharedPrefUtil.getUserEmail();
         RequestBody body =
                 RequestBody.create(MediaType.parse("application/xml"),
                         addressbookConfig.getRequestBody(Properties.RESOURCE_TYPE, Properties.DISPLAY_NAME));
         return addressBookHomeService
                 .getAddressbook(addressbookConfig.getAddressbookUrl(),
-                        body, "Bearer " + sharedPrefUtil.getOAuthToken(), "1")
+                        body, "Bearer " + nishRepository.getAccessToken(email), "1")
                 .compose(schedulerTransformer.getSchedulerTransformer());
     }
 }

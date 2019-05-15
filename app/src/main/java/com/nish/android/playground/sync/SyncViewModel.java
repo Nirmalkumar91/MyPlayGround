@@ -18,6 +18,7 @@ import com.nish.android.playground.oauth.OAuthTokenProvider;
 import com.nish.android.playground.oauth.UserProfile;
 import com.nish.android.playground.repository.NishRepository;
 import com.nish.android.playground.repository.UserProfileEntity;
+import com.nish.android.playground.splash.SplashActivity;
 
 import java.io.UnsupportedEncodingException;
 
@@ -53,29 +54,32 @@ public class SyncViewModel extends BaseViewModel {
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
         WebLoginUseCase loginUseCase = useCaseDataProvider.get(WebLoginUseCase.class);
+        String email = sharedPrefUtil.getUserEmail();
         if (loginUseCase == null) {
-            if (!TextUtils.isEmpty(sharedPrefUtil.getOAuthToken())) {
+            String token = nishRepository.getAccessToken(email);
+            if (!TextUtils.isEmpty(token)) {
                 syncContacts();
+            } else {
+                sharedPrefUtil.clearEmail();
+                launchSplashActivity();
             }
         } else if (!TextUtils.isEmpty(loginUseCase.getAuthCode()))  {
             subscribeOn(oAuthTokenProvider.getAccessToken(loginUseCase.getAuthCode()).subscribe(this::onAuthSuccess, this::onAuthFailure));
         } else {
-            Log.e("**********", "Login failed: " + loginUseCase.getError());
+            sharedPrefUtil.clearEmail();
+            launchSplashActivity();
         }
     }
 
     private void onAuthFailure(Throwable throwable) {
-        sharedPrefUtil.clearAuthCode();
-        sharedPrefUtil.clearAuthToken();
         sharedPrefUtil.clearEmail();
-        Log.e("LOGIN", "Login failed", throwable);
+        Log.e("********", "Login failed", throwable);
     }
 
     private void onAuthSuccess(OAuthToken oAuthToken) {
         try {
             UserProfile userProfile = decoderUtil.decodeIdToken(oAuthToken.getIdToken());
             sharedPrefUtil.setUserEmail(userProfile.getEmail());
-            sharedPrefUtil.setOAuthToken(oAuthToken.getAccessToken());
 
             UserProfileEntity userProfileEntity = new UserProfileEntity();
             userProfileEntity.setEmail(userProfile.getEmail());
@@ -138,6 +142,15 @@ public class SyncViewModel extends BaseViewModel {
     private void launchLandingActivity() {
         StartActivityEvent event = StartActivityEvent.getEventBuilder(this)
                 .setActivity(LandingActivity.class)
+                .setFinishActivity(true)
+                .build();
+
+        viewEventBus.send(event);
+    }
+
+    private void launchSplashActivity() {
+        StartActivityEvent event = StartActivityEvent.getEventBuilder(this)
+                .setActivity(SplashActivity.class)
                 .setFinishActivity(true)
                 .build();
 

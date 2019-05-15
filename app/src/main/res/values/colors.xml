@@ -18,6 +18,7 @@
     <color name="onBackgroundColor">#000000</color>
     <color name="onSurfaceColor">#000000</color>
     <color name="onErrorColor">#FFFFFF</color>
+    <color name="primaryTextColor">#FFFFFF</color>
 
     <!--<color name="nish_green_dark">#007252</color>
     <color name="nish_green">#009972</color>

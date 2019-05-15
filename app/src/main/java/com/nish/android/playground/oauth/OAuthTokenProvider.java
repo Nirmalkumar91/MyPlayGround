@@ -24,9 +24,9 @@ public class OAuthTokenProvider {
                 .compose(schedulerTransformer.getSchedulerTransformer());
     }
 
-    public Observable<OAuthToken> refreshAccessToken() {
+    public Observable<OAuthToken> refreshAccessToken(String refreshToken) {
         return oAuthService
-                .refreshToken("Refresh token", AppConstants.CLIENT_ID, AppConstants.GRANT_TYPE_REFRESH_TOKEN)
+                .refreshToken(refreshToken, AppConstants.CLIENT_ID, AppConstants.GRANT_TYPE_REFRESH_TOKEN)
                 .compose(schedulerTransformer.getSchedulerTransformer());
     }
 

@@ -17,10 +17,10 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -29,9 +29,12 @@
                 <data android:scheme="com.nish.android.nishcontacts" />
             </intent-filter>
         </activity>
+
         <activity android:name=".login.WebLoginActivity" />
+
         <activity android:name=".sync.SyncActivity"/>
-        <activity android:name=".landing.LandingActivity" />
+
+        <activity android:name=".landing.LandingActivity"/>
 
     </application>
 
