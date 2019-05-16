@@ -6,7 +6,7 @@ import com.nish.android.playground.di.module.ApplicationModule;
 import com.nish.android.playground.di.module.CommonModule;
 import com.nish.android.playground.di.module.DatabaseModule;
 import com.nish.android.playground.di.module.NetworkModule;
-import com.nish.android.playground.discovery.AddressbookHomeModule;
+import com.nish.android.playground.addressbook.AddressbookHomeModule;
 import com.nish.android.playground.oauth.OAuthServiceModule;
 
 import javax.inject.Singleton;

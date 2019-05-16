@@ -19,16 +19,10 @@ public class DecoderUtil {
     }
 
     public UserProfile decodeIdToken(String token) throws UnsupportedEncodingException {
-        Log.e("*******", "Id_Token: " + token);
         String[] data = token.split("\\.");
-        String header = getJson(data[0]);
-        Log.e("*******", "Header: " + header);
-
+        //String header = getJson(data[0]);
         String body = getJson(data[1]);
-        Log.e("*******", "Body: " + body);
-
-        String signature = getJson(data[2]);
-        Log.e("*******", "Signature: " + signature);
+        //String signature = getJson(data[2]);
 
         return gson.fromJson(body, UserProfile.class);
     }

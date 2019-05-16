@@ -28,7 +28,7 @@
  * <em>http://mathias-seguy.developpez.com/</em></br> </br>
  * *****************************************************************************************************************</br>
  */
-package com.nish.android.playground.discovery;
+package com.nish.android.playground.addressbook;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;

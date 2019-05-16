@@ -1,6 +1,6 @@
 package com.nish.android.playground.oauth;
 
-import com.nish.android.playground.repository.UserProfileEntity;
+import com.nish.android.playground.userdb.UserProfileEntity;
 
 import javax.inject.Inject;
 

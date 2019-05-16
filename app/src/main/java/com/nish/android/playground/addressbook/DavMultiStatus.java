@@ -1,6 +1,5 @@
-package com.nish.android.playground.discovery;
+package com.nish.android.playground.addressbook;
 
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.NamespaceList;

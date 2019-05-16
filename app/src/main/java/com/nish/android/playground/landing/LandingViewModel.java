@@ -3,7 +3,7 @@ package com.nish.android.playground.landing;
 import com.nish.android.playground.common.BaseViewModel;
 import com.nish.android.playground.common.SharedPrefUtil;
 import com.nish.android.playground.common.ViewEventBus;
-import com.nish.android.playground.repository.NishRepository;
+import com.nish.android.playground.userdb.UserProfileDatabase;
 
 import javax.inject.Inject;
 
@@ -13,13 +13,13 @@ import androidx.lifecycle.OnLifecycleEvent;
 public class LandingViewModel extends BaseViewModel {
 
     private SharedPrefUtil sharedPrefUtil;
-    private NishRepository nishRepository;
+    private UserProfileDatabase userSessionDBProvider;
     private ViewEventBus viewEventBus;
 
     @Inject
-    public LandingViewModel(SharedPrefUtil sharedPrefUtil, NishRepository nishRepository, ViewEventBus viewEventBus) {
+    public LandingViewModel(SharedPrefUtil sharedPrefUtil, UserProfileDatabase userSessionDBProvider, ViewEventBus viewEventBus) {
         this.sharedPrefUtil = sharedPrefUtil;
-        this.nishRepository = nishRepository;
+        this.userSessionDBProvider = userSessionDBProvider;
         this.viewEventBus = viewEventBus;
     }
 
@@ -29,6 +29,6 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     public void logout() {
-        nishRepository.clearUserProfile(sharedPrefUtil.getUserEmail());
+        userSessionDBProvider.clearUserProfile(sharedPrefUtil.getUserEmail());
     }
 }

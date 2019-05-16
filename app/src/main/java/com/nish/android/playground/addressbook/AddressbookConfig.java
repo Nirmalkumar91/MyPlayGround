@@ -1,4 +1,4 @@
-package com.nish.android.playground.discovery;
+package com.nish.android.playground.addressbook;
 
 import com.nish.android.playground.common.SharedPrefUtil;
 

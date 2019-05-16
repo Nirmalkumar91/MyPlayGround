@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 public class SharedPrefUtil {
     private final static String PREF_USER_EMAIL = "pref_user_email";
     private final static String PREF_ADDRESSBOOK_URL = "pref_addressbook_url";
+    private static final String PREF_OAUTH_CODE = "pref_auth_code";
 
     private SharedPreferences sharedPreferences;
 
@@ -27,6 +28,18 @@ public class SharedPrefUtil {
 
     public void clearEmail() {
         putString(PREF_USER_EMAIL, null);
+    }
+
+    public String getOAuthCode() {
+        return getString(PREF_OAUTH_CODE);
+    }
+
+    public void setOAuthCode(String code) {
+        putString(PREF_OAUTH_CODE, code);
+    }
+
+    public void clearAuthCode() {
+        putString(PREF_OAUTH_CODE, null);
     }
 
     public String getAddressbookUrl() {

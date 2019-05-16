@@ -1,20 +1,27 @@
-package com.nish.android.playground.repository;
+package com.nish.android.playground.userdb;
 
+import com.nish.android.playground.oauth.OAuthToken;
 import com.nish.android.playground.oauth.UserProfile;
 
 import javax.inject.Inject;
 
-public class NishRepository {
+import io.reactivex.Single;
+
+public class UserProfileDatabase {
 
     private UserProfileDao userProfileDao;
 
     @Inject
-    public NishRepository(UserProfileDao userProfileDao) {
+    public UserProfileDatabase(UserProfileDao userProfileDao) {
         this.userProfileDao = userProfileDao;
     }
 
     public String getAccessToken(String email) {
         return userProfileDao.getAccessToken(email);
+    }
+
+    public Single<UserProfile> getUserProfileSingle(String email) {
+        return userProfileDao.getUserProfile(email).map(entity -> convertUserProfile(entity));
     }
 
     public UserProfile getUserProfile(String email) {
@@ -32,8 +39,17 @@ public class NishRepository {
         return userProfile;
     }
 
-    public void saveUserProfile(UserProfileEntity userProfileEntity) {
-        userProfileDao.insert(userProfileEntity);
+    public void saveUserProfile(UserProfile userProfile, OAuthToken oAuthToken) {
+        UserProfileEntity entity = new UserProfileEntity();
+        entity.setName(userProfile.getName());
+        entity.setFirstName(userProfile.getGivenName());
+        entity.setLastName(userProfile.getFamilyName());
+        entity.setEmail(userProfile.getEmail());
+        entity.setPictureUrl(userProfile.getPicture());
+        entity.setAccessToken(oAuthToken.getAccessToken());
+        entity.setRefreshToken(oAuthToken.getRefreshToken());
+        entity.setExpiryDate(oAuthToken.getExpiresIn());
+        userProfileDao.insert(entity);
     }
 
     public void clearUserProfile(String email) {

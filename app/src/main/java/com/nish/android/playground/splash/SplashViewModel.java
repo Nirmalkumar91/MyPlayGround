@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.nish.android.playground.login.LoginActivity;
-import com.nish.android.playground.repository.NishRepository;
+import com.nish.android.playground.userdb.UserProfileDatabase;
 import com.nish.android.playground.sync.SyncActivity;
 import com.nish.android.playground.common.BaseViewModel;
 import com.nish.android.playground.common.SharedPrefUtil;
@@ -19,19 +19,19 @@ import androidx.lifecycle.OnLifecycleEvent;
 public class SplashViewModel extends BaseViewModel {
 
     private ViewEventBus viewEventBus;
-    private NishRepository nishRepository;
+    private UserProfileDatabase userSessionDBProvider;
     private String email;
 
     @Inject
-    public SplashViewModel(SharedPrefUtil sharedPrefUtil, ViewEventBus eventBus, NishRepository nishRepository) {
+    public SplashViewModel(SharedPrefUtil sharedPrefUtil, ViewEventBus eventBus, UserProfileDatabase userSessionDBProvider) {
         this.viewEventBus = eventBus;
-        this.nishRepository = nishRepository;
+        this.userSessionDBProvider = userSessionDBProvider;
         this.email = sharedPrefUtil.getUserEmail();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
-        String token = nishRepository.getAccessToken(email);
+        String token = userSessionDBProvider.getAccessToken(email);
         Log.d("********", "Access token: " + token);
         if (TextUtils.isEmpty(token)) {
             launchLoginActivity();

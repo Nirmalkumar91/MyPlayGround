@@ -9,18 +9,13 @@ import com.nish.android.playground.common.BaseViewModel;
 import com.nish.android.playground.common.SharedPrefUtil;
 import com.nish.android.playground.common.ViewEventBus;
 import com.nish.android.playground.common.events.StartActivityEvent;
-import com.nish.android.playground.discovery.AddressbookHomeProvider;
-import com.nish.android.playground.discovery.DavMultiStatus;
+import com.nish.android.playground.addressbook.AddressbookHomeProvider;
+import com.nish.android.playground.addressbook.DavMultiStatus;
 import com.nish.android.playground.login.WebLoginUseCase;
-import com.nish.android.playground.oauth.DecoderUtil;
-import com.nish.android.playground.oauth.OAuthToken;
-import com.nish.android.playground.oauth.OAuthTokenProvider;
+import com.nish.android.playground.oauth.UserProfileRepository;
 import com.nish.android.playground.oauth.UserProfile;
-import com.nish.android.playground.repository.NishRepository;
-import com.nish.android.playground.repository.UserProfileEntity;
+import com.nish.android.playground.userdb.UserProfileDatabase;
 import com.nish.android.playground.splash.SplashActivity;
-
-import java.io.UnsupportedEncodingException;
 
 import javax.inject.Inject;
 
@@ -32,39 +27,41 @@ public class SyncViewModel extends BaseViewModel {
     private ViewEventBus viewEventBus;
     private SharedPrefUtil sharedPrefUtil;
     private UseCaseDataProvider useCaseDataProvider;
-    private DecoderUtil decoderUtil;
-    private OAuthTokenProvider oAuthTokenProvider;
+    private UserProfileRepository userProfileRepository;
     private AddressbookHomeProvider addressbookHomeProvider;
-    private NishRepository nishRepository;
+    private UserProfileDatabase userProfileDatabase;
+    private String email;
 
     @Inject
     public SyncViewModel(ViewEventBus eventBus, SharedPrefUtil sharedPrefUtil,
-                         UseCaseDataProvider useCaseDataProvider, DecoderUtil decoderUtil,
-                         OAuthTokenProvider oAuthTokenProvider, AddressbookHomeProvider addressbookHomeProvider,
-                         NishRepository nishRepository) {
+                         UseCaseDataProvider useCaseDataProvider,
+                         UserProfileRepository userProfileRepository,
+                         AddressbookHomeProvider addressbookHomeProvider,
+                         UserProfileDatabase userProfileDatabase) {
         this.viewEventBus = eventBus;
         this.sharedPrefUtil = sharedPrefUtil;
         this.useCaseDataProvider = useCaseDataProvider;
-        this.decoderUtil = decoderUtil;
-        this.oAuthTokenProvider = oAuthTokenProvider;
+        this.userProfileRepository = userProfileRepository;
         this.addressbookHomeProvider = addressbookHomeProvider;
-        this.nishRepository = nishRepository;
+        this.userProfileDatabase = userProfileDatabase;
+        this.email = sharedPrefUtil.getUserEmail();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume() {
         WebLoginUseCase loginUseCase = useCaseDataProvider.get(WebLoginUseCase.class);
-        String email = sharedPrefUtil.getUserEmail();
         if (loginUseCase == null) {
-            String token = nishRepository.getAccessToken(email);
+            String token = userProfileDatabase.getAccessToken(email);
             if (!TextUtils.isEmpty(token)) {
                 syncContacts();
             } else {
+                userProfileDatabase.clearUserProfile(email);
                 sharedPrefUtil.clearEmail();
                 launchSplashActivity();
             }
         } else if (!TextUtils.isEmpty(loginUseCase.getAuthCode()))  {
-            subscribeOn(oAuthTokenProvider.getAccessToken(loginUseCase.getAuthCode()).subscribe(this::onAuthSuccess, this::onAuthFailure));
+            sharedPrefUtil.setOAuthCode(loginUseCase.getAuthCode());
+            subscribeOn(userProfileRepository.getUserProfile().subscribe(this::onAuthSuccess, this::onAuthFailure));
         } else {
             sharedPrefUtil.clearEmail();
             launchSplashActivity();
@@ -76,27 +73,13 @@ public class SyncViewModel extends BaseViewModel {
         Log.e("********", "Login failed", throwable);
     }
 
-    private void onAuthSuccess(OAuthToken oAuthToken) {
-        try {
-            UserProfile userProfile = decoderUtil.decodeIdToken(oAuthToken.getIdToken());
-            sharedPrefUtil.setUserEmail(userProfile.getEmail());
-
-            UserProfileEntity userProfileEntity = new UserProfileEntity();
-            userProfileEntity.setEmail(userProfile.getEmail());
-            userProfileEntity.setAccessToken(oAuthToken.getAccessToken());
-            userProfileEntity.setRefreshToken(oAuthToken.getRefreshToken());
-            userProfileEntity.setFirstName(userProfile.getGivenName());
-            userProfileEntity.setLastName(userProfile.getFamilyName());
-            userProfileEntity.setName(userProfile.getName());
-            userProfileEntity.setPictureUrl(userProfile.getPicture());
-            userProfileEntity.setExpiryDate(0);
-
-            nishRepository.saveUserProfile(userProfileEntity);
-
-            syncContacts();
-        } catch (UnsupportedEncodingException e) {
-            Log.e("********", e.getMessage(), e);
-        }
+    private void onAuthSuccess(UserProfile userProfile) {
+        email = userProfile.getEmail();
+        UserProfile profile = userProfileDatabase.getUserProfile(email);
+        Log.e("********", "Auth Success: " + profile.getEmail());
+        Log.e("********", "Name: " + profile.getName());
+        Log.e("********", "Picture: " + profile.getPicture());
+        syncContacts();
     }
 
 

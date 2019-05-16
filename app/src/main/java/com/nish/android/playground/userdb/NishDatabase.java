@@ -1,4 +1,4 @@
-package com.nish.android.playground.repository;
+package com.nish.android.playground.userdb;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

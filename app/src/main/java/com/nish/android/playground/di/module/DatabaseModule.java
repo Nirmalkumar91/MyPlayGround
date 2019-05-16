@@ -2,9 +2,9 @@ package com.nish.android.playground.di.module;
 
 import android.app.Application;
 
-import com.nish.android.playground.repository.NishDatabase;
-import com.nish.android.playground.repository.NishRepository;
-import com.nish.android.playground.repository.UserProfileDao;
+import com.nish.android.playground.userdb.NishDatabase;
+import com.nish.android.playground.userdb.UserProfileDatabase;
+import com.nish.android.playground.userdb.UserProfileDao;
 
 import javax.inject.Singleton;
 
@@ -32,7 +32,7 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
-    NishRepository provideNishRepository(UserProfileDao userProfileDao) {
-        return new NishRepository(userProfileDao);
+    UserProfileDatabase provideUserProfileDatabase(UserProfileDao userProfileDao) {
+        return new UserProfileDatabase(userProfileDao);
     }
 }

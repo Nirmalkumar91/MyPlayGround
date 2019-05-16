@@ -1,4 +1,4 @@
-package com.nish.android.playground.discovery;
+package com.nish.android.playground.addressbook;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,8 +1,8 @@
-package com.nish.android.playground.discovery;
+package com.nish.android.playground.addressbook;
 
 import com.nish.android.playground.common.SharedPrefUtil;
 import com.nish.android.playground.network.SchedulerTransformer;
-import com.nish.android.playground.repository.NishRepository;
+import com.nish.android.playground.userdb.UserProfileDatabase;
 
 import javax.inject.Inject;
 
@@ -16,17 +16,17 @@ public class AddressbookHomeProvider {
     private SharedPrefUtil sharedPrefUtil;
     private AddressbookConfig addressbookConfig;
     private SchedulerTransformer schedulerTransformer;
-    private NishRepository nishRepository;
+    private UserProfileDatabase userProfileDatabase;
 
     @Inject
     public AddressbookHomeProvider(AddressBookHomeService addressBookHomeService, SharedPrefUtil sharedPrefUtil,
                                    AddressbookConfig addressbookConfig, SchedulerTransformer schedulerTransformer,
-                                   NishRepository nishRepository) {
+                                   UserProfileDatabase userProfileDatabase) {
         this.addressBookHomeService = addressBookHomeService;
         this.sharedPrefUtil = sharedPrefUtil;
         this.addressbookConfig = addressbookConfig;
         this.schedulerTransformer = schedulerTransformer;
-        this.nishRepository = nishRepository;
+        this.userProfileDatabase = userProfileDatabase;
     }
 
     public Observable<DavMultiStatus> getAddressbookHome() {
@@ -34,7 +34,7 @@ public class AddressbookHomeProvider {
         RequestBody body = RequestBody.create(MediaType.parse("application/xml"),
                 addressbookConfig.getRequestBody(Properties.RESOURCE_TYPE, Properties.ADDRESSBOOK_HOME_SET));
         return addressBookHomeService.getAddressbookHomeSet(AddressbookConfig.getAddressbookHomeSetPath(email),
-                        body, "Bearer " + nishRepository.getAccessToken(email))
+                        body, "Bearer " + userProfileDatabase.getAccessToken(email))
                 .compose(schedulerTransformer.getSchedulerTransformer());
     }
 
@@ -45,7 +45,7 @@ public class AddressbookHomeProvider {
                         addressbookConfig.getRequestBody(Properties.RESOURCE_TYPE, Properties.DISPLAY_NAME));
         return addressBookHomeService
                 .getAddressbook(addressbookConfig.getAddressbookUrl(),
-                        body, "Bearer " + nishRepository.getAccessToken(email), "1")
+                        body, "Bearer " + userProfileDatabase.getAccessToken(email), "1")
                 .compose(schedulerTransformer.getSchedulerTransformer());
     }
 }
